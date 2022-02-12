@@ -1,0 +1,51 @@
+{% extends 'registro/layout.html' %}
+{% load humanize %}
+{% block content %}
+
+    <form class="form" method="post">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-list-ol"></i>
+                    Formulario de Registro
+                </h3>
+            </div>
+
+            <div class="card-body">
+                {% csrf_token %}
+                {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al guardar el registro</h5>
+                    </div>
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+
+                {% endif %}
+
+                {% for field in form.visible_fields %}
+
+                    <div class="form-group">
+                        <label for="email">{{ field.label }}:</label>
+                        {{ field }}
+                    </div>
+
+                {% endfor %}
+
+                {#                {{ form.as_p }}#}
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success">Guardar</button>
+            </div>
+            {#        <button class="btn btn-primary" type="submit"><i class="icon-search"></i> Guardar</button>#}
+            {#        <button type="submit" id="submit">Guardar</button>#}
+        </div>
+    </form>
+
+{% endblock %}
+

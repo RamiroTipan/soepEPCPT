@@ -1,0 +1,167 @@
+{% extends 'registro/layout.html' %}
+{% load humanize %}
+{% load static %}
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'lib/datatables/datatables-1.11.3/css/jquery.dataTables.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables/buttons-2.1.1/css/buttons.dataTables.min.css' %}"/>
+    <script src="{% static 'lib/datatables/datatables-1.11.3/jquery-3.5.1.js' %}"></script>
+    <script src="{% static 'lib/datatables/datatables-1.11.3/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/buttons-2.1.1/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/datatables-1.11.3/jszip.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/buttons-2.1.1/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/pdfmake-0.1.36/pdfmake.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
+    <script src="{% static 'lib/datatables/buttons-2.1.1/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/datatables-1.11.3/css/jquery.dataTables.min.css' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+
+
+    <form class="form" method="post" xmlns="http://www.w3.org/1999/html">
+
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-cogs"></i>
+                    Listado de procesos
+                </h3>
+            </div>
+            {#desde aqui#}
+            <div class="card-body">
+                <style>
+                    table {
+                        font-family: arial, sans-serif;
+                        font-size: 10px;
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+
+                    {##}
+                    td {
+                        border: 1px solid #dddddd;
+                        text-align: left;
+                        padding: 8px;
+                    }
+
+                    {##}
+                    th {
+                        border: 1px solid #dddddd;
+                        text-align: left;
+                        padding: 8px;
+                        background-color: #4682B4;
+                        color: white;
+
+                    }
+
+                    tr:nth-child(even) {
+                        background-color: #dddddd;
+                    }
+                </style>
+                {#    hasta aqui#}
+                <table class="table table-hover" id="data2">
+                    <thead>
+                    <tr>
+
+                        <th scope="col"> Código</th>
+                        <th scope="col"> Objeto</th>
+                        <th scope="col"> Tipo</th>
+{#                        <th scope="col"> Forma de pago</th>#}
+                        <th scope="col"> Plazo de entrega (meses)</th>
+                        <th scope="col"> Fecha de publicación</th>
+                        <th scope="col"> Fecha de entrega de la propuesta</th>
+                        <th scope="col"> Fecha de Adjudicación</th>
+                        <th scope="col"> Estado del proceso</th>
+                        <th scope="col"> Proyecto</th>
+                        <th scope="col"> Provincia</th>
+                        <th scope="col">Num. Viv.</th>
+{#                        <th scope="col">Monto del Proyecto</th>#}
+                        <th scope="col">dirigido a</th>
+                        <th scope="col">Con experiencia de</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% if  object_list %}
+                        {% for proceso in object_list %}
+
+                            <tr>
+
+                                <td>{{ proceso.codigo }}</td>
+                                <td>{{ proceso.objeto }}</td>
+                                {% if proceso.tipo_contratacion == '01' %}
+                                    <td style="color:#0000ff"> Construcción</td>
+                                {% elif proceso.tipo_contratacion == '02' %}
+                                    <td style="color:#0000ff"> Fiscalización</td>
+                                    {% else %}
+                                    <td>Administración de Contrato</td>
+                                {% endif %}
+{#                                <td>{{ proceso.forma_pago }}</td>#}
+                                <td>{{ proceso.plazo_entrega }}</td>
+                                <td>{{ proceso.Fecha_publica }}</td>
+                                <td>{{ proceso.Fecha_propuesta }}</td>
+                                <td>{{ proceso.Fecha_adjudica }}</td>
+                                {% if proceso.estado == '01' %}
+                                    <td style="color:#0000ff"> En trámite</td>
+                                {% elif proceso.estado == '02' %}
+                                    <td style="color:#0000ff"> Adjudicado</td>
+                                {% else %}
+                                    <td> Fallido</td>
+                                {% endif %}
+                                <td>{{ proceso.relacion_proyectos }}</td>
+                                <td>{{ proceso.relacion_proyectos.relacion_provincia }}</td>
+                                <td>{{ proceso.relacion_proyectos.numero_viviendas }}</td>
+{#                                <td>{{ proceso.relacion_proyectos.monto_ref | intcomma }}</td>#}
+                                {% if proceso.dirigido == '01' %}
+                                    <td style="color:#0000ff"> Natural</td>
+                                {% else %}
+                                    <td>Jurídica</td>
+                                {% endif %}
+                                <td>{{ proceso.monto_experiencia | intcomma}}</td>
+                            </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+                        <span style="color: red; ">No tiene invitaciones</span>
+                    {% endif %}
+
+                    </tbody>
+                </table>
+                {#desde aqui#}
+            </div>
+        </div>
+        {#hasta aqui#}
+        {#	<button type="submit" id="submit">Guardar</button>#}
+    </form>
+
+
+{% endblock %}
+   <link rel="stylesheet" href="{% static 'lib/datatables/datatables-1.11.3/css/jquery.dataTables.min.css' %}"/>
+    <script src="{% static 'lib/datatables/datatables-1.11.3/js/jquery.dataTables.min.js' %}"></script>
+{% block javascript %}
+    <script type="application/javascript">
+
+        $('#data2').DataTable({
+
+            order: [[0, "desc"]],
+            destroy: true,
+            dom: 'Blfrtip',
+            {#dom: 'Bfrtip',#}
+
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+
+            "language": {
+                url: '{% static 'lib/datatables/datatables-1.11.3/spanish.txt' %}'
+            },
+
+        });
+
+    </script>
+{% endblock %}

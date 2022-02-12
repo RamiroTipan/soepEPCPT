@@ -1,0 +1,284 @@
+{% extends 'registro/layout.html' %}
+{% load humanize %}
+{% load widget_tweaks %}
+{% load static %}
+{% block head %}
+
+
+    {#    ---------->incremente este#}
+{#    <script src="{% static 'lib/papaparse-5.0.2/papaparse.min.js' %}"></script>#}
+    <script src="{% static 'lib/datatables/ajax/jquery-3.5.1.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/jquery.dataTables.min.js' %}"></script>
+{#    <script src="{% static 'lib/editor-2.0.6/js/dataTables.editor.min.js' %}"></script>#}
+    <script src="{% static 'lib/datatables/ajax/dataTables.dateTime.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/dataTables.select.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/jszip.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/pdfmake.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/vfs_fonts.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/buttons.print.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/jquery-ui-1.12.1/jquery-ui.css' %}"/>
+    <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'lib/sweetalert.min.js' %}"></script>
+    <script src="{% static 'lib/sweetalert.js' %}"></script>
+
+
+    <link rel="stylesheet" href="{% static 'lib/datatables/ajax/jquery.dataTables.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables/ajax/buttons.dataTables.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/editor-2.0.6/css/editor.dataTables.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables/ajax/select.dataTables.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables/ajax/dataTables.dateTime.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables/ajax/buttons.dataTables.min.css' %}"/>
+
+
+
+
+    {#    <script src="{% static 'lib/datatables/datatables-1.11.3/jquery-3.5.1.js' %}"></script>#}
+    {#    <script src="{% static 'lib/datatables/datatables-1.11.3/js/jquery.dataTables.min.js' %}"></script>#}
+    {#    <script src="{% static 'lib/datatables/buttons-2.1.1/js/dataTables.buttons.min.js' %}"></script>#}
+    {#    <script src="{% static 'lib/datatables/datatables-1.11.3/jszip.min.js' %}"></script>#}
+    {#    <script src="{% static 'lib/datatables/buttons-2.1.1/js/buttons.html5.min.js' %}"></script>#}
+    {#    <script src="{% static 'lib/datatables/pdfmake-0.1.36/pdfmake.min.js' %}"></script>#}
+    {#    <script src="{% static 'lib/datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>#}
+    {#    <script src="{% static 'lib/datatables/buttons-2.1.1/js/buttons.print.min.js' %}"></script>#}
+    {#    <script src="{% static 'lib/datatables/datatables-1.11.3/css/jquery.dataTables.min.css' %}"></script>#}
+    {#    <link href="{% static 'lib/select2-4.1.0-rc.0/dist/css/select2.min.css' %}" rel="stylesheet"/>#}
+    {#    <link href="{% static 'lib/select2-4.1.0-rc.0/dist/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>#}
+    {#    <script src="{% static 'lib/select2-4.1.0-rc.0/dist/js/select2.min.js' %}"></script>#}
+    {#    <script src="{% static 'lib/select2-4.1.0-rc.0/dist/js/i18n/es.js' %}"></script>#}
+
+{% endblock %}
+{% block content %}
+    <form class="form" method="post">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-user-plus"></i>
+                    Crear Invitaciones
+                </h3>
+            </div>
+            <div class="card-body">
+                <style>
+                    table {
+                        font-family: arial, sans-serif;
+                        font-size: 11px;
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+
+                    {##}
+                    td {
+                        border: 1px solid #dddddd;
+                        text-align: left;
+                        padding: 8px;
+                    }
+
+                    {##}
+                    th {
+                        border: 1px solid #dddddd;
+                        text-align: left;
+                        padding: 8px;
+                        background-color: #4682B4;
+                        color: white;
+
+                    }
+
+                    tr:nth-child(even) {
+                        background-color: #dddddd;
+                    }
+                </style>
+
+                <div class="card card-secondary">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-envelope"></i> Invitaciones</h3>
+                    </div>
+                    {% csrf_token %}
+                </div>
+                {{ form.as_p }}
+                <div class="row">
+                    <div class="col col-lg-4">
+
+                    </div>
+                </div>
+                <div class="card card-secondary">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-users"></i> Oferentes Invitados</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-append">
+                                                <button type="button"
+                                                        class="btn btn-info btn-flat btnSearchInv"><i
+                                                        class="fas fa-search-plus"></i> Buscar  invitados </button>
+                                            </span>
+                                        </div>
+                                        <div class="row">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+
+                                    </div>
+                                    <div class="col col-lg-4">
+                                        <div class="form-group">
+                                            <label>Seleccionar todos:</label><br>
+                                            <input type="checkbox" class="check" value="" name="selectall">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table table-bordered" id="data5">
+                            <thead>
+                            <tr>
+                                <th>Nombres</th>
+                                <th>Cedula</th>
+                                <th>Tipo persona</th>
+                                <th>Tipo usuario</th>
+                                <th>Experiencia</th>
+                                <th>Estado</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <button type="button" disabled class="btn btn-success btnCreateInvitations">Guardar</button>
+                </div>
+                {#        <button class="btn btn-primary" type="submit"><i class="icon-search"></i> Guardar</button>#}
+                {#        <button type="submit" id="submit">Guardar</button>#}
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block javascript %}
+    <script type="application/javascript">
+
+    </script>
+
+    <script type="application/javascript">
+
+        $(function () {
+            var tblInvitations = null;
+            var btnCreateInvitations = $('.btnCreateInvitations');
+
+            $('.btnSearchInv').on('click', function () {
+                var parameters = {
+                    'action': 'search_invitations',
+                    'procesos': $('select[name="procesos"]').val(),
+                };
+
+                tblInvitations = $('#data5').DataTable({
+                    destroy: true,
+                    dom: 'Blfrtip',
+                    deferRender: true,
+                    autoWidth: false,
+                    paging: false,
+                    fixedColumns: true,
+                    ajax: {
+                        url: window.location.pathname,
+                        type: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        data: parameters,
+                        dataSrc: "",
+                    },
+                    columns: [
+                        {data: "nombres"},
+                        {data: "cedula"},
+                        {data: "tipo_persona"},
+                        {#{data: "tipo_usuario"},#}
+                        {data: "area_aplica"},
+                        {data: "experiencia"},
+                        {data: "id"},
+                    ],
+                    columnDefs: [
+                        {
+                            targets: [-1],
+                            class: 'text-center',
+                            render: function (data, type, row) {
+                                return '<input type="checkbox" name="state">';
+                            }
+                        },
+                    ],
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ],
+                    rowCallback: function (row, data, index) {
+
+                    },
+                    initComplete: function (settings, json) {
+                        btnCreateInvitations.prop('disabled', $.isEmptyObject(json));
+                    }
+                });
+
+                $('#data5 tbody')
+                    .off()
+                    .on('change', 'input[name="state"]', function () {
+                        var tr = tblInvitations.cell($(this).closest('td, li')).index();
+                        var data = tblInvitations.row(tr.row).data();
+                        data.state = this.checked ? 1 : 0;
+                    });
+            });
+
+            $('input[name="selectall"]')
+                .on('change', function () {
+                    var state = this.checked;
+                    var cells = tblInvitations.cells().nodes();
+                    $(cells).find('input[name="state"]').prop('checked', state).trigger('change');
+
+                });
+
+            btnCreateInvitations.on('click', function () {
+                var items = tblInvitations.rows().data().toArray().filter(value => value.state === 1);
+                if (items.length === 0) {
+                    swal('Alerta', 'Debe tener seleccionado al menos 1 item', 'warning');
+                    {#swal("Hello world!");#}
+
+                    return false;
+                }
+                $.ajax({
+                    url: window.location.pathname,
+                    data: {
+                        'action': 'create_invitation',
+                        'procesos': $('select[name="procesos"]').val(),
+                        'items': JSON.stringify(items)
+                    },
+                    type: 'POST',
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    success: function (request) {
+                        if (!request.hasOwnProperty('error')) {
+                            {#alert('Datos guardados');#}
+                            swal("Proceso", 'Datos Guardados ', 'success')
+
+                            setTimeout(function () {
+                                location.href = '{% url 'invitaciones_list' %}';
+                            }, 2000);
+                            return false;
+                        }
+                        {#alert(request.error);#}
+                        swal('Error', request.error, 'error');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        {#alert(errorThrown + ' ' + textStatus);#}
+                        swal(errorThrown + ' ' + textStatus);
+                    }
+                });
+            });
+        })
+    </script>
+
+{% endblock %}
+

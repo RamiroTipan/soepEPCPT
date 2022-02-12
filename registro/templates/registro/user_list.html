@@ -1,0 +1,169 @@
+{% extends 'registro/layout.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'lib/datatables/datatables-1.11.3/css/jquery.dataTables.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables/buttons-2.1.1/css/buttons.dataTables.min.css' %}"/>
+{#    <script src="{% static 'lib/datatables/datatables-1.11.3/jquery-3.5.1.js' %}"></script>#}
+{#    <script src="{% static 'lib/datatables/datatables-1.11.3/js/jquery.dataTables.min.js' %}"></script>#}
+{#    <script src="{% static 'lib/datatables/buttons-2.1.1/js/dataTables.buttons.min.js' %}"></script>#}
+{#    <script src="{% static 'lib/datatables/datatables-1.11.3/jszip.min.js' %}"></script>#}
+{#    <script src="{% static 'lib/datatables/buttons-2.1.1/js/buttons.html5.min.js' %}"></script>#}
+{#    <script src="{% static 'lib/datatables/pdfmake-0.1.36/pdfmake.min.js' %}"></script>#}
+{#    <script src="{% static 'lib/datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>#}
+{#    <script src="{% static 'lib/datatables/buttons-2.1.1/js/buttons.print.min.js' %}"></script>#}
+{#    <script src="{% static 'lib/datatables/datatables-1.11.3/css/jquery.dataTables.min.css' %}"></script>#}
+
+     <script src="{% static 'lib/datatables/ajax/jquery-3.5.1.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/dataTables.dateTime.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/dataTables.select.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/jszip.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/pdfmake.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/vfs_fonts.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/ajax/buttons.print.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/jquery-ui-1.12.1/jquery-ui.css' %}"/>
+    <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+
+    <form class="form" method="post" xmlns="http://www.w3.org/1999/html">
+
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-users"></i>
+                    Listado de oferentes
+                </h3>
+            </div>
+            <div class="card-body">
+                <style>
+                    table {
+                        font-family: arial, sans-serif;
+                        font-size: 10.5px;
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+
+                    {##}
+                    td {
+                        border: 1px solid #dddddd;
+                        text-align: left;
+                        padding: 8px;
+                    }
+
+                    {##}
+                    th {
+                        border: 1px solid #dddddd;
+                        text-align: left;
+                        padding: 8px;
+                        background-color: #4682B4;
+                        color: white;
+
+                    }
+
+                    tr:nth-child(even) {
+                        background-color: #dddddd;
+                    }
+                </style>
+
+                <table class="table table-hover" id="data1">
+                    <thead>
+                    <tr>
+
+                        <th scope="col"> Fecha de Alta</th>
+                        <th scope="col"> Usuario</th>
+                        <th scope="col"> Nombres</th>
+                        <th scope="col"> Apellidos</th>
+                        <th scope="col"> Correo</th>
+                        <th scope="col"> Cédula</th>
+                        <th scope="col"> RUC</th>
+                        <th scope="col"> Dirección</th>
+                        <th scope="col"> Tel. Cel.</th>
+                        <th scope="col"> Tel. Conv.</th>
+                        <th scope="col"> Monto Experiencia</th>
+                        <th scope="col">Área</th>
+                        <th scope="col">Tipo</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% if  object_list %}
+                        {% for usuario in object_list %}
+                            <tr>
+                                <td>{{ usuario.date_joined }}</td>
+                                <td>{{ usuario.username }}</td>
+                                <td>{{ usuario.first_name }}</td>
+                                <td>{{ usuario.last_name }}</td>
+                                <td>{{ usuario.email }}</td>
+                                <td>{{ usuario.cedula }}</td>
+                                <td>{{ usuario.ruc }}</td>
+                                <td>{{ usuario.direccion }}</td>
+                                <td>{{ usuario.tel_cel }}</td>
+                                <td>{{ usuario.tel_con }}</td>
+                                <td>{{ usuario.experiencia | intcomma}}</td>
+                                {% if usuario.area_aplica == '01' %}
+                                    <td style="color:#0000ff"> Constructor</td>
+                                {% elif usuario.area_aplica == '02' %}
+                                    <td style="color:#0000ff"> Fiscalizador</td>
+                                {% else %}
+                                    <td> Administrador</td>
+                                {% endif %}
+                                {% if usuario.tipo_persona == '01' %}
+                                    <td style="color:#0000ff"> Natural</td>
+                                {% else %}
+                                    <td>Jurídica</td>
+                                {% endif %}
+
+                            </tr>
+
+                        {% endfor %}
+                    {% else %}
+                        <span style="color: red; ">No tiene invitaciones</span>
+                    {% endif %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </form>
+
+{% endblock %}
+
+{% block javascript %}
+
+    <script type="application/javascript">
+
+        {#-------> desde #}
+        $('#data1').DataTable({
+            order: [[0, "desc"]],
+            destroy: true,
+            {#dom: 'Blfrtip',#}
+            {#dom: 'Qfrtip',#}
+            dom: 'Blfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+
+            "language": {
+                url: '{% static 'lib/datatables/datatables-1.11.3/spanish.txt' %}'
+            },
+
+        })
+        ;
+
+        {#<------------hasta#}
+    </script>
+
+{% endblock %}

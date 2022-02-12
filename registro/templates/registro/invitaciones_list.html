@@ -1,0 +1,148 @@
+{% extends 'registro/layout.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'lib/datatables/datatables-1.11.3/css/jquery.dataTables.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables/buttons-2.1.1/css/buttons.dataTables.min.css' %}"/>
+    <script src="{% static 'lib/datatables/datatables-1.11.3/jquery-3.5.1.js' %}"></script>
+    <script src="{% static 'lib/datatables/datatables-1.11.3/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/buttons-2.1.1/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/datatables-1.11.3/jszip.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/buttons-2.1.1/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/pdfmake-0.1.36/pdfmake.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
+    <script src="{% static 'lib/datatables/buttons-2.1.1/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'lib/datatables/datatables-1.11.3/css/jquery.dataTables.min.css' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+
+    <form class="form" method="post" xmlns="http://www.w3.org/1999/html">
+
+        {% csrf_token %}
+        {{ form.as_p }}
+        {#desde aqui#}
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-list-ol"></i>
+                    Listado de invitaciones
+                </h3>
+            </div>
+
+            {## desde aqui#}
+            <div class="card-body">
+                <style>
+                    table {
+                        font-family: arial, sans-serif;
+                        font-size: 11px;
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+
+                    {##}
+                    td {
+                        border: 1px solid #dddddd;
+                        text-align: left;
+                        padding: 8px;
+                    }
+
+                    {##}
+                    th {
+                        border: 1px solid #dddddd;
+                        text-align: left;
+                        padding: 8px;
+                        background-color: #4682B4;
+                        color: white;
+
+                    }
+
+                    tr:nth-child(even) {
+                        background-color: #dddddd;
+                    }
+                </style>
+
+                <table class="table table-hover" id="data">
+
+                    {#  # hasta aqui#}
+                    <thead>
+
+                    <tr>
+                        <th scope="col"> ID.</th>
+                        <th scope="col"> Fecha de creación</th>
+                        <th scope="col"> Proceso</th>
+                        <th scope="col"> Encargado</th>
+                        <th scope="col"> Monto de experiencia</th>
+                        <th scope="col"> Fecha de entrega de la propuesta</th>
+                        <th scope="col"> Num. Viv.</th>
+                        <th scope="col"> Monto del proyecto</th>
+                        <th scope="col"> Provincia</th>
+                        <th scope="col"> Estado del proceso</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% if  object_list %}
+                        {% for invitacion in object_list %}
+
+                            <tr>
+
+                                <td>{{ invitacion.id }}</td>
+                                <td>{{ invitacion.fecha_crea_invita }}</td>
+                                <td>{{ invitacion.relacion_procesoi }}</td>
+                                <td>{{ invitacion.relacion_usuarioi }}</td>
+                                <td>{{ invitacion.relacion_procesoi.monto_experiencia | intcomma }}</td>
+                                <td>{{ invitacion.relacion_procesoi.Fecha_propuesta }}</td>
+                                <td>{{ invitacion.relacion_procesoi.relacion_proyectos.numero_viviendas }}</td>
+                                <td>{{ invitacion.relacion_procesoi.relacion_proyectos.monto_ref | intcomma }}</td>
+                                <td>{{ invitacion.relacion_procesoi.relacion_proyectos.relacion_provincia }}</td>
+
+                                {% if invitacion.relacion_procesoi.estado == '01' %}
+                                    <td style="color:#0000ff"> En Trámite</td>
+                                {% elif invitacion.relacion_procesoi.estado == '02' %}
+                                    <td style="color:#0000ff"> Adjudicado</td>
+                                {% else %}
+                                    <td> Fallido</td>
+                                {% endif %}
+
+                            </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+                        <span style="color: red; ">No tiene invitaciones</span>
+                    {% endif %}
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </form>
+{% endblock %}
+
+{% block javascript %}
+    <script type="application/javascript">
+        $('#data').DataTable({
+
+            order: [[0, "desc"]],
+            destroy: true,
+            dom: 'Blfrtip',
+            {#dom: 'Bfrtip',#}
+
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+
+            "language": {
+                url: '{% static 'lib/datatables/datatables-1.11.3/spanish.txt' %}'
+            },
+
+        });
+
+
+    </script>
+
+{% endblock %}

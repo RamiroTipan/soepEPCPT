@@ -1,0 +1,14 @@
+{% extends 'registro/layout.html' %}
+
+{% block content %}
+    {#    desde este#}
+
+    {#    hasta este#}
+    <form class="form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" id="submit">Guardar</button>
+    </form>
+
+{% endblock %}

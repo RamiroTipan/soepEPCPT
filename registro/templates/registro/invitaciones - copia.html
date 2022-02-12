@@ -1,0 +1,112 @@
+{% extends 'registro/layout.html' %}
+{% load humanize %}
+{% block content %}
+    {#    desde aqui#}
+  <form class="form" method="post" xmlns="http://www.w3.org/1999/html">
+
+        {% csrf_token %}
+        {{ form.as_p }}
+
+    <div class="card card-default">
+        <div class="card-header">
+            <h4 class="card-title">
+                <div class="busqueda">
+                    <form class="navbar-search pull-left" method="POST" action="/invitaciones/">
+                        {% csrf_token %}
+                        <div class="btn-group">
+                            <button class="btn btn-primary btn-small" type="submit"><i class="fas fa-search"></i> Visualizar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                {#                <i class="fas fa-search"></i>#}
+                Listado de invitaciones
+            </h4>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+         <style>
+            table {
+                font-family: arial, sans-serif;
+                font-size: 12px;
+                border-collapse: collapse;
+                width: 100%;
+            }
+{##}
+            td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+{##}
+            th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+                background-color: #4682B4;
+                color: white;
+
+            }
+
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+        </style>
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col"> ID.</th>
+                    <th scope="col"> Invitado</th>
+                    <th scope="col"> Fecha de invitación</th>
+                    <th scope="col"> Proceso</th>
+                    <th scope="col"> Encargado</th>
+                    <th scope="col"> Correo al que debe enviar la propuesta</th>
+                    <th scope="col"> Fecha de entrega de la propuesta</th>
+                    <th scope="col"> Num. Viv.</th>
+                    <th scope="col"> Monto del proyecto</th>
+                    <th scope="col"> Provincia</th>
+                    <th scope="col"> Estado del proceso</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if  oferentes1 %}
+                {% for invitacion in oferentes1 %}
+
+                    <tr>
+                        <td>{{ invitacion.invitaciones.id }}</td>
+                        <td>{{ invitacion.invitado }}</td>
+                        <td>{{ invitacion.fecha }}</td>
+                        <td>{{ invitacion.invitaciones.relacion_procesoi }}</td>
+                        <td>{{ invitacion.invitaciones.relacion_usuarioi }}</td>
+                        <td>{{ invitacion.invitaciones.relacion_usuarioi.email }}</td>
+                        <td>{{ invitacion.invitaciones.fecha_propuesta }}</td>
+                        <td>{{ invitacion.invitaciones.relacion_procesoi.relacion_proyectos.numero_viviendas }}</td>
+                        <td>{{ invitacion.invitaciones.relacion_procesoi.relacion_proyectos.monto_ref | intcomma }}</td>
+                        <td>{{ invitacion.invitaciones.relacion_procesoi.relacion_proyectos.relacion_provincia }}</td>
+                        {% if invitacion.invitaciones.relacion_procesoi.estado == '01' %}
+                            <td style="color:#0000ff"> En Trámite</td>
+                        {% elif invitacion.invitaciones.relacion_procesoi.estado == '02' %}
+                            <td style="color:#0000ff"> Adjudicado</td>
+                        {% else %}
+                            <td> Fallido</td>
+                        {% endif %}
+
+                    </tr>
+
+                {% endfor %}
+
+            {% else %}
+                <span style="color: red; ">No tiene invitaciones</span>
+            {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    </form>
+
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}
