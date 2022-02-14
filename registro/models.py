@@ -190,7 +190,7 @@ class Proceso(models.Model):
 
 class Invitaciones(models.Model):
     id = models.AutoField(primary_key=True,
-                          verbose_name='ID Invitación')  # cual es ese atributo de filtro encargador aqui?
+                          verbose_name='ID Invitación')
     fecha_crea_invita = models.DateTimeField(auto_now_add=True)
     relacion_usuarioi = models.ForeignKey(Usuario, null=True, verbose_name='Encargado', blank=False,  # este
                                           on_delete=models.RESTRICT, related_name='invita')

@@ -126,23 +126,6 @@ class CrearInvitacionesForm(forms.ModelForm):
 
         }
 
-    # tipo_usuario = forms.ChoiceField(widget=forms.Select(attrs={
-    #     'class': 'form-control'
-    # }), choices=(
-    #     ('01', 'Oferente'),
-    #     ('02', 'Técnico'),
-    #     ('03', 'Administrador')
-    # ))
-    #
-    # area_aplica = forms.ChoiceField(widget=forms.Select(attrs={
-    #     'class': 'form-control'
-    # }), choices=(
-    #     ('01', 'Constructor'),
-    #     ('02', 'Fiscalizador'),
-    #     ('03', 'Administrador')
-    # ))
-
-
 class InvitacionesForm(forms.Form):
     procesos = forms.ModelChoiceField(widget=forms.Select(attrs={
         'class': 'form-control'
@@ -154,7 +137,7 @@ class CrearInvitadosForm(forms.ModelForm):
     exclude = ()
 
 
-ChildFormset = inlineformset_factory(  # FamylyMembersFormSet
+ChildFormset = inlineformset_factory(
     Invitaciones,
     Invitados,
     form=CrearInvitadosForm,

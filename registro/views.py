@@ -107,8 +107,6 @@ def invitaciones(request):
 
         if form.is_valid():
             form.save()
-            # username = form.cleaned_data['username']
-            # messages.success(request, f'Usuario {username} creado')
             return redirect('feed')
     else:
         form = MostrarInvitacionesForm()
@@ -193,21 +191,12 @@ class AdjudicarInvitaciones(CreateView):
     template_name = 'registro/adjudicar.html'
     success_url = reverse_lazy('adjudicar')
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     # context = ['title'] = 'Select anidados'
-    #     return context
-    # fields = '__all__'
-
 
 class ConsultarOferentesCal(ListView):
     model = Usuario
     template_name = 'registro/consultar_user.html'
 
 
-# class InvitacionesNested(ListView): estava ListView
-#     model = Invitaciones
-@csrf_exempt
 class InvitacionesNested(ListView):
     model = Invitaciones
 
@@ -275,35 +264,3 @@ class CrearInvitacionesView(FormView):
         context = super().get_context_data(**kwargs)
         return context
 
-# # --------->hasta aqui mi codigo
-#     # ------- desde hasta aqui - codigo ayuda
-#     @method_decorator(login_required)
-#     @method_decorator(csrf_exempt)
-#     def dispatch(self, request, *args, **kwargs):
-#         return super().dispatch(request, *args, **kwargs)
-#
-#     def post(self, request, *args, **kwargs):
-#         data = {}
-#         try:
-#             action = request.POST['action']
-#             if action == 'search_persons':
-#                 data = []
-#                 # tipo_usuario = request.POST['tipo_usuario']
-#                 area_aplica = request.POST['area_aplica']
-#                 print(request.POST)
-#                 queryset = Usuario.objects.filter(area_aplica=area_aplica)
-#                 for q in queryset[0:10]:
-#                     data.append(q.toJSON())
-#             else:
-#                 data['error'] = 'No ha ingresado ninguna opción'
-#         except Exception as e:
-#             data['error'] = str(e)
-#         return HttpResponse(json.dumps(data), content_type='application/json')
-
-#
-# def get_context_data(self, **kwargs):
-#     context = super().get_context_data(**kwargs)
-#     return context
-
-
-# # hasta a aqui
