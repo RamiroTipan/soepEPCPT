@@ -6,10 +6,10 @@
 
 
     {#    ---------->incremente este#}
-{#    <script src="{% static 'lib/papaparse-5.0.2/papaparse.min.js' %}"></script>#}
+    {#    <script src="{% static 'lib/papaparse-5.0.2/papaparse.min.js' %}"></script>#}
     <script src="{% static 'lib/datatables/ajax/jquery-3.5.1.js' %}"></script>
     <script src="{% static 'lib/datatables/ajax/jquery.dataTables.min.js' %}"></script>
-{#    <script src="{% static 'lib/editor-2.0.6/js/dataTables.editor.min.js' %}"></script>#}
+    {#    <script src="{% static 'lib/editor-2.0.6/js/dataTables.editor.min.js' %}"></script>#}
     <script src="{% static 'lib/datatables/ajax/dataTables.dateTime.min.js' %}"></script>
     <script src="{% static 'lib/datatables/ajax/dataTables.select.min.js' %}"></script>
     <script src="{% static 'lib/datatables/ajax/dataTables.buttons.min.js' %}"></script>
@@ -95,6 +95,7 @@
                     </div>
                     {% csrf_token %}
                 </div>
+                {% csrf_token %}
                 {{ form.as_p }}
                 <div class="row">
                     <div class="col col-lg-4">

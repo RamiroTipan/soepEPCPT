@@ -202,10 +202,12 @@ class InvitacionesNested(ListView):
 
 
 class CrearInvitacionesView(FormView):
+
     template_name = 'registro/invitaciones_tot.html'
     form_class = InvitacionesForm
     success_url = reverse_lazy('invitaciones_tot')
 
+    @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         data = {}
         action = request.POST['action']
